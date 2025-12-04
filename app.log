@@ -1,0 +1,55 @@
+2025/12/01 18:53:21 Running server...
+[KONEKSI] 2025/12/01 18:54:07 NodeMCU terkoneksi
+[KONEKSI] 2025/12/01 18:54:32 Client terkoneksi
+[SWITCH] 2025/12/01 18:54:34 ON
+[SWITCH] 2025/12/01 18:54:43 OFF
+[SWITCH] 2025/12/01 18:54:46 ON
+[SWITCH] 2025/12/01 18:54:49 OFF
+[PING] 2025/12/01 18:59:27 NodeMCU masih terkoneksi
+[PING] 2025/12/01 19:04:48 NodeMCU masih terkoneksi
+[PING] 2025/12/01 19:10:07 NodeMCU masih terkoneksi
+[PING] 2025/12/01 19:15:28 NodeMCU masih terkoneksi
+[PING] 2025/12/01 19:20:48 NodeMCU masih terkoneksi
+[PING] 2025/12/01 19:26:08 NodeMCU masih terkoneksi
+[PING] 2025/12/01 19:31:28 NodeMCU masih terkoneksi
+[PING] 2025/12/01 19:36:47 NodeMCU masih terkoneksi
+[PING] 2025/12/01 19:42:07 NodeMCU masih terkoneksi
+[PING] 2025/12/01 19:47:27 NodeMCU masih terkoneksi
+[PING] 2025/12/01 19:52:46 NodeMCU masih terkoneksi
+[PING] 2025/12/01 19:58:05 NodeMCU masih terkoneksi
+[PING] 2025/12/01 20:03:24 NodeMCU masih terkoneksi
+[PING] 2025/12/01 20:08:44 NodeMCU masih terkoneksi
+[SWITCH] 2025/12/01 20:10:08 ON
+[SWITCH] 2025/12/01 20:10:10 OFF
+[PING] 2025/12/01 20:14:03 NodeMCU masih terkoneksi
+[PING] 2025/12/01 20:19:22 NodeMCU masih terkoneksi
+[SWITCH] 2025/12/01 20:24:09 ON
+[SWITCH] 2025/12/01 20:24:30 OFF
+[PING] 2025/12/01 20:24:41 NodeMCU masih terkoneksi
+[PING] 2025/12/01 20:30:00 NodeMCU masih terkoneksi
+[PING] 2025/12/01 20:35:19 NodeMCU masih terkoneksi
+[PING] 2025/12/01 20:40:37 NodeMCU masih terkoneksi
+[PING] 2025/12/01 20:45:57 NodeMCU masih terkoneksi
+[PING] 2025/12/01 20:51:15 NodeMCU masih terkoneksi
+[PING] 2025/12/01 20:56:33 NodeMCU masih terkoneksi
+[PING] 2025/12/01 21:01:52 NodeMCU masih terkoneksi
+[PING] 2025/12/01 21:07:11 NodeMCU masih terkoneksi
+[PING] 2025/12/01 21:12:29 NodeMCU masih terkoneksi
+[PING] 2025/12/01 21:17:46 NodeMCU masih terkoneksi
+[PING] 2025/12/01 21:23:04 NodeMCU masih terkoneksi
+[PING] 2025/12/01 21:28:22 NodeMCU masih terkoneksi
+[PING] 2025/12/01 21:33:40 NodeMCU masih terkoneksi
+[PING] 2025/12/01 21:38:57 NodeMCU masih terkoneksi
+[PING] 2025/12/01 21:44:14 NodeMCU masih terkoneksi
+[SWITCH] 2025/12/01 21:45:15 ON
+[SWITCH] 2025/12/01 21:45:18 OFF
+[PING] 2025/12/01 21:49:32 NodeMCU masih terkoneksi
+[PING] 2025/12/01 21:54:49 NodeMCU masih terkoneksi
+[PING] 2025/12/01 22:00:06 NodeMCU masih terkoneksi
+[PING] 2025/12/01 22:05:23 NodeMCU masih terkoneksi
+[PING] 2025/12/01 22:10:40 NodeMCU masih terkoneksi
+[PING] 2025/12/01 22:15:57 NodeMCU masih terkoneksi
+[ERROR] 2025/12/01 22:19:47 Gagal membaca pesan atau putus koneksi dari NodeMCU
+[KONEKSI] 2025/12/01 22:22:01 NodeMCU terkoneksi
+[ERROR] 2025/12/01 22:22:46 Gagal membaca pesan atau putus koneksi dari NodeMCU
+[ERROR] 2025/12/01 22:22:54 Gagal membaca pesan atau putus koneksi dari client
