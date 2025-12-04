@@ -1,9 +1,6 @@
 #include <NTPClient.h>
 
 #include <ArduinoWebsockets.h>
-
-#include <ESP8266HTTPClient.h>
-#include <ArduinoWiFiServer.h>
 #include <BearSSLHelpers.h>
 #include <CertStoreBearSSL.h>
 #include <ESP8266WiFi.h>
@@ -32,6 +29,8 @@ using namespace websockets;
 
 WebsocketsClient ws;
 WiFiUDP ntpUDP;
+
+// Used for timestamping the log
 NTPClient timeClient(ntpUDP, "pool.ntp.org", 7 * 3600, 60000);
 
 void onMessageCallback(WebsocketsMessage message) {
@@ -53,15 +52,14 @@ void onEventsCallback(WebsocketsEvent event, String data) {
   } else if (event == WebsocketsEvent::ConnectionClosed) {
     timeClient.update();
     Serial.printf("[%s] ", timeClient.getFormattedTime());
+
+    // Reconnect when connection is closed
     Serial.println("Connnection closed, reconnecting...");
     delay(1000);
-    ws.connect("wss://urbanf.kresnawan.com:443/v1/ws");
-  } 
-  // else if (event == WebsocketsEvent::GotPing) {
-  //   Serial.println("Got a Ping!");
-  // } else if (event == WebsocketsEvent::GotPong) {
-  //   Serial.println("Got a Pong!");
-  // }
+
+    
+    ws.connect("wss://yourdomain.com:443/path");
+  }
 }
 
 void setup() {
@@ -76,7 +74,7 @@ void setup() {
   Serial.println(" ...");
 
   int i = 0;
-  while (WiFi.status() != WL_CONNECTED) {  // Wait for the Wi-Fi to connect
+  while (WiFi.status() != WL_CONNECTED) {
     delay(1000);
     Serial.println(++i);
   }
@@ -91,24 +89,23 @@ void setup() {
   pinMode(4, OUTPUT);
   timeClient.begin();
 
-  // run callback when events are occuring
+  // Run callback when events are occuring
   ws.onEvent(onEventsCallback);
   ws.onMessage(onMessageCallback);
 
+  // Adding fingerprint is a must for wss
   ws.setFingerprint(ssl_fingerprint);
-  // Connect to server
   ws.addHeader("Authorization", "device");
-  ws.connect("wss://urbanf.kresnawan.com:443/v1/ws");
-  
-  
 
-  // Send a message
-  ws.send("Hello Server");
+  // The port must correct
+  // 80 for ws and 443 for wss
+  ws.connect("wss://yourdomain.com:443/path");
+
   ws.ping();
 }
 
 unsigned long previousMillisLoop = 0;
-const long intervalLoop = 1;  // Tugas perulangan berjalan setiap 5ms (contoh)
+const long intervalLoop = 1;
 
 unsigned long previousMillisPeriodic = 0;
 const long intervalPeriodic = 1000 * 50;
@@ -116,43 +113,10 @@ const long intervalPeriodic = 1000 * 50;
 void loop() {
   unsigned long currentMillis = millis();
 
-  // Continuous
+  // Continuous execution
   if (currentMillis - previousMillisLoop >= intervalLoop) {
     previousMillisLoop = currentMillis;
     ws.poll();
     
   }
-
-  // Periodic (a minute)
-  if (currentMillis - previousMillisPeriodic >= intervalPeriodic) {
-    previousMillisPeriodic = currentMillis;
-    // ws.ping();
-  }
-
-  // digitalWrite(4, HIGH);
-  // ws.send("ON");
-  // delay(5000);
-
-  // digitalWrite(4, LOW);
-  // ws.send("OFF");
-  // delay(5000);
-
-  // if(WiFi.status() == WL_CONNECTED) {
-  //   digitalWrite(4, HIGH);
-  //   http.begin(client, "http://4f79dbd51f55.ngrok-free.app:80/v1");
-  //   int httpCode = http.GET();
-
-  //   if (httpCode > 0) {
-  //     String payload = http.getString();
-  //     Serial.println(httpCode);
-  //     Serial.println(payload);
-  //     digitalWrite(4, LOW);
-  //   } else {
-  //     Serial.printf("[HTTP] GET failed, error: %s\n", http.errorToString(httpCode).c_str());
-  //   }
-
-  //   http.end();
-
-  //   delay(5000);
-  // }
 }
