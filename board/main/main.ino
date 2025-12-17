@@ -1,37 +1,41 @@
 #include <NTPClient.h>
 
 #include <ArduinoWebsockets.h>
-#include <BearSSLHelpers.h>
-#include <CertStoreBearSSL.h>
 #include <ESP8266WiFi.h>
-#include <ESP8266WiFiAP.h>
-#include <ESP8266WiFiGeneric.h>
-#include <ESP8266WiFiGratuitous.h>
-#include <ESP8266WiFiMulti.h>
-#include <ESP8266WiFiSTA.h>
-#include <ESP8266WiFiScan.h>
-#include <ESP8266WiFiType.h>
-#include <WiFiClient.h>
-#include <WiFiClientSecure.h>
-#include <WiFiClientSecureBearSSL.h>
-#include <WiFiServer.h>
-#include <WiFiServerSecure.h>
-#include <WiFiServerSecureBearSSL.h>
 #include <WiFiUdp.h>
 
-const char* ssid = "WIFI TAMU";
-const char* password = "tehpucukharum";
+/* Match with your wifi */
+
+const char* ssid = "your_ssid";
+const char* password = "your_password";
 
 WiFiClient client;
-const char ssl_fingerprint[] PROGMEM = "F0 AD EE F3 A0 60 D6 DC 7F 45 8C 25 27 1F A2 DD A3 9F 2A E2";
 
 using namespace websockets;
 
 WebsocketsClient ws;
 WiFiUDP ntpUDP;
 
-// Used for timestamping the log
+/* Match the port with your preferences, 80 for ws and 443 for wss */
+const char URL[] PROGMEM = "wss://ipaddress:443/path";
+
+/* Used for timestamping the serial print */
 NTPClient timeClient(ntpUDP, "pool.ntp.org", 7 * 3600, 60000);
+
+void logd(const char* message) {
+  timeClient.update();
+  Serial.printf("[%s] ", timeClient.getFormattedTime());
+  Serial.printf("%s\n", message);
+}
+
+void wsConnect() {
+  int i = 0;
+  bool connected = ws.connect(URL);
+
+  if (!connected) {
+    logd("Websocket connection failed");
+  }
+}
 
 void onMessageCallback(WebsocketsMessage message) {
   if (message.data() == "ON") {
@@ -44,34 +48,31 @@ void onMessageCallback(WebsocketsMessage message) {
 }
 
 void onEventsCallback(WebsocketsEvent event, String data) {
-  
-  if (event == WebsocketsEvent::ConnectionOpened) {
-    timeClient.update();
-    Serial.printf("[%s] ", timeClient.getFormattedTime());
-    Serial.println("Connnection Opened");
-  } else if (event == WebsocketsEvent::ConnectionClosed) {
-    timeClient.update();
-    Serial.printf("[%s] ", timeClient.getFormattedTime());
 
-    // Reconnect when connection is closed
-    Serial.println("Connnection closed, reconnecting...");
+  if (event == WebsocketsEvent::ConnectionOpened) {
+    logd("Websocket connection opened");
+  } else if (event == WebsocketsEvent::ConnectionClosed) {
+    logd("Websocket connection closed, reconnecting...");
     delay(1000);
 
-    
-    ws.connect("wss://yourdomain.com:443/path");
+
+    wsConnect();
   }
 }
 
 void setup() {
+  timeClient.begin();
   pinMode(LED_BUILTIN, OUTPUT);
+
   Serial.begin(9600);
-  delay(2000);
-  Serial.println('\n');
+
+  delay(5000);
+  Serial.print('\n');
 
   WiFi.begin(ssid, password);
   Serial.print("Connecting to ");
   Serial.print(ssid);
-  Serial.println(" ...");
+  Serial.println("...");
 
   int i = 0;
   while (WiFi.status() != WL_CONNECTED) {
@@ -79,27 +80,19 @@ void setup() {
     Serial.println(++i);
   }
 
-  
-
-  Serial.println('\n');
-  Serial.println("Connection established!");
-  Serial.print("IP address:\t");
-  Serial.println(WiFi.localIP());
+  logd("WiFi connected");
 
   pinMode(4, OUTPUT);
-  timeClient.begin();
-
-  // Run callback when events are occuring
+  
   ws.onEvent(onEventsCallback);
   ws.onMessage(onMessageCallback);
 
-  // Adding fingerprint is a must for wss
-  ws.setFingerprint(ssl_fingerprint);
+  /* Set insecure so it is not required to change the fingerprint periodically */
+  /* Not recommended for production, go with fingerprint for safe actions */ 
+  ws.setInsecure();
   ws.addHeader("Authorization", "device");
 
-  // The port must correct
-  // 80 for ws and 443 for wss
-  ws.connect("wss://yourdomain.com:443/path");
+  wsConnect();
 
   ws.ping();
 }
@@ -111,12 +104,25 @@ unsigned long previousMillisPeriodic = 0;
 const long intervalPeriodic = 1000 * 50;
 
 void loop() {
+
+  /* WiFi connectivity checker */
+  if (WiFi.status() != WL_CONNECTED) {
+    logd("WiFi disconnected, reconnecting...");
+    bool connected = WiFi.reconnect();
+
+    while (WiFi.status() != WL_CONNECTED) {
+      delay(1000);
+    }
+
+    logd("WiFi reconnected");
+    wsConnect();
+  }
+
   unsigned long currentMillis = millis();
 
-  // Continuous execution
+  /* Continuous execution */
   if (currentMillis - previousMillisLoop >= intervalLoop) {
     previousMillisLoop = currentMillis;
     ws.poll();
-    
   }
 }
