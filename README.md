@@ -15,12 +15,12 @@ Beside that, this enables us to control the microcontroller without having to ha
 There's still an issue about the connection reliability (i've tested it and it disconnects sometime) and I'm currently working on it, feel free to open a pull request if you interested in this topic as well.
 
 # Dependencies
-`NTPClient.h` : https://github.com/arduino-libraries/NTPClient
-`ArduinoWebsockets.h` : https://github.com/gilmaimon/ArduinoWebsockets
+`NTPClient.h` : https://github.com/arduino-libraries/NTPClient<br>
+`ArduinoWebsockets.h` : https://github.com/gilmaimon/ArduinoWebsockets<br>
 `ESP8266WiFi.h` : https://github.com/esp8266/Arduino
 
 # Getting started
-In root directory, run `go run ./cmd/api` to start the WebSocket server
-Use tunneling like `ngrok` to get your server accessible for debugging
-Set the SSID, password, and server URL on `./board/main/main.ino` matching yours
-Compile the program to your NodeMCU.
+In root directory, run `go run ./cmd/api` to start the WebSocket server<br>
+Use tunneling like `ngrok` to get your server accessible for debugging<br>
+Set the SSID, password, and server URL on `./board/main/main.ino` matching yours<br>
+Compile the program to your NodeMCU.<br>
